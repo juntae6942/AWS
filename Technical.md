@@ -243,4 +243,85 @@ Multi AZ 설정을 하면 RDS는 이중화를 위해 다른 가용 영역에 데
 }`
 
 # Monitoring, LoadBalancing 및 Scaling
+## 관측 가능성(Observability)
+- 모니터링 -> 성능, 지표(metrics)
+- 로깅(logging) -> App 처리 기록
+- 추적(tracing)
+## Monitoring 이점
+- 운영 문제에 미리 대응 가능 
+- 성능과 신뢰성 개선 
+- 보안 위협과 이벤트 인지 
+- 데이터 중심 의사 결정 
+- 비용 효율적 솔루션 생성
+## CloudWatch
+지표는 EC2 인스턴스, EBS, RDS 등의 대다수 AWS 서비스에서 기본적으로 제공  
+추가 지표를 사용하도록 설정 할 수도 있다.  
+지표 그래프 생성 및 경보 설정도 가능
+- 타임스탬프
+- 네임스페이스 컨테이너로 구성
+### 네임스페이스
+- 이름 지정 규칙
+- AWS/서비스명 ex) AWS/EC2
+
+서비스에서 지표를 보낼 때 이름/값 자격증명 `키 페어`가 지표와 연결 -> `차원`  
+차원은 CloudWatch에서 반환하는 결과를 필터링  
+ex) 지표를 검색할 때 인스턴스 ID 차원을 지정하면 특정 EC2 인스턴스에 대한 통계를 확인할 수 있다.
+
+## ELB(Elastic Load Balancing)
+로드밸런서도 인스턴스다. 즉, 똑같이 Auto Scaling으로 동작한다. 병목을 막기위해
+- 대상 그룹(Target Group)
+- 리스너
+- 규칙
+- 라운드로빈으로 트래픽 분산
+### ELB의 이점
+- 고가용성 및 탄력성
+- 보안
+- 기능 적용 범위
+- 강력한 모니터링을 통해 상태 파악
+- 간편한 통합 및 전세계 어디서나 사용 가능
+### ELB 유형
+- Application Load Balancer
+- Network Load Balancer : IP 기반 분산, TCP/UDP
+- Gateway Load Balancer : 보안 솔루션, 트래픽 필터링
+- Classic Load Balancer
+
+## Auto Scaling
+수직적 크기 조정
+- Scale up
+- Scale down
+수평적 크기 조정
+- Scale out
+- Scale in
+### Auto Scaling 이점
+- 내결함성 개선(장애 허용 시스템, fault tolerance) : 이중화
+- 애플리케이션 가용성 향상
+- 더 저렴한 비용
+
+### 시작 템플릿
+EC2 인스턴스를 생성할 때는 AMI ID, 인스턴스 유형, 보안 그룹, 스토리지 볼륨 및 기타 파라미터가 필요
+### Auto Scaling Group
+EC2 Auto Scaling이 리소스를 배포하는 위치를 정의
+EC2가 배포되는 VPC 및 서브넷을 지정
+**서로 다른 가용 영역(AZ, Available Zone)에서 서브넷을 2개 이상 선택 해야함**
+### 파라미터
+- 최소 : 최소 인스턴스 수
+- 최대 : 최대 인스턴스 수
+- 원하는 용량 : 최소 <= 원하는 용량 <= 최대
+### 정책
+단순 조정 정책
+단계 조정 정책
+대상 추적 조정 정책
+
+## 실습
+EC2 페이지에서 사용가능
+![img_2.png](img_2.png)
+적어도 2개의 가용영역을 선택해야한다.
+![img_4.png](img_4.png)
+타겟 그룹도 생성한다.
+![img_5.png](img_5.png)
+헬스 체크도 설정
+![img_6.png](img_6.png)  
+시작 템플릿도 생성한다.
+![img_7.png](img_7.png)
+
 # 강좌 요약
